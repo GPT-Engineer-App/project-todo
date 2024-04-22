@@ -52,7 +52,7 @@ const Index = () => {
       <Heading mb={6}>Project Management Todo App</Heading>
       <Box w="100%" maxW="500px">
         <Input placeholder="Add a new task..." value={inputValue} onChange={handleInputChange} onKeyPress={handleKeyPress} />
-        <Button leftIcon={<FaPlus />} colorScheme="teal" mt={2} onClick={handleAddTask}>
+        <Button leftIcon={<FaPlus />} colorScheme="blue" mt={2} onClick={handleAddTask}>
           Add Task
         </Button>
       </Box>
