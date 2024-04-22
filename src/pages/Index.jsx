@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Box, Button, Input, List, ListItem, Text, VStack, Heading, IconButton } from "@chakra-ui/react";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash, FaEdit } from "react-icons/fa";
 
 const Index = () => {
   const [tasks, setTasks] = useState([]);
+  const [editIndex, setEditIndex] = useState(-1);
+  const [editText, setEditText] = useState("");
   const [inputValue, setInputValue] = useState("");
 
   const handleAddTask = () => {
@@ -22,9 +24,26 @@ const Index = () => {
     setInputValue(event.target.value);
   };
 
+  const handleEditTask = (index, task) => {
+    setEditIndex(index);
+    setEditText(task);
+  };
+
+  const handleSaveEdit = (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index] = editText;
+    setTasks(updatedTasks);
+    setEditIndex(-1);
+    setEditText("");
+  };
+
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      handleAddTask();
+      if (editIndex !== -1) {
+        handleSaveEdit(editIndex);
+      } else {
+        handleAddTask();
+      }
     }
   };
 
@@ -41,6 +60,8 @@ const Index = () => {
         {tasks.map((task, index) => (
           <ListItem key={index} p={2} shadow="md" borderWidth="1px" display="flex" justifyContent="space-between" alignItems="center">
             <Text>{task}</Text>
+            {editIndex === index ? <Input value={editText} onChange={(e) => setEditText(e.target.value)} onKeyPress={(e) => e.key === "Enter" && handleSaveEdit(index)} /> : <Text>{task}</Text>}
+            <IconButton icon={<FaEdit />} isRound="true" onClick={() => handleEditTask(index, task)} aria-label="Edit task" />
             <IconButton icon={<FaTrash />} isRound="true" onClick={() => handleDeleteTask(index)} aria-label="Delete task" />
           </ListItem>
         ))}
